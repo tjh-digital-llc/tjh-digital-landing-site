@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>TJH Digital – AI Trading Infrastructure & Automation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="TJH Digital builds custom institutional-grade AI trading platforms using Interactive Brokers (IBKR), Azure, Kafka, Redis, and modern microservices." />
+  <meta name="robots" content="index,follow" />
+
+  <style>
+    :root {
+      --bg: #05060a;
+      --bg-alt: #0b0d15;
+      --card: #111320;
+      --accent: #3fd0ff;
+      --accent-soft: rgba(63, 208, 255, 0.12);
+      --accent-gold: #f5c86a;
+      --text: #f5f7ff;
+      --muted: #9aa0b8;
+      --border: #1d2133;
+      --danger: #ff5c7a;
+      --shadow-soft: 0 24px 60px rgba(0, 0, 0, 0.7);
+      --radius-lg: 18px;
+      --radius-xl: 24px;
+      --radius-pill: 999px;
+      --max-width: 1160px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #191b2c 0, #05060a 55%);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+      border-radius: var(--radius-lg);
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: linear-gradient(to bottom, rgba(5, 6, 10, 0.97), rgba(5, 6, 10, 0.85), transparent);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+    }
+
+    .brand-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 12px;
+      background: radial-gradient(circle at 20% 0%, #3fd0ff 0, #171c3b 40%, #05060a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 24px rgba(63, 208, 255, 0.5);
+      font-size: 0.9rem;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .nav-cta {
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(63, 208, 255, 0.5);
+      font-size: 0.85rem;
+      background: radial-gradient(circle at top left, rgba(63, 208, 255, 0.2), transparent);
+    }
+
+    main {
+      flex: 1;
+      padding-bottom: 64px;
+    }
+
+    section {
+      padding: 56px 0;
+    }
+
+    .hero {
+      padding-top: 32px;
+      padding-bottom: 40px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 40px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(63, 208, 255, 0.4);
+      background: rgba(5, 8, 20, 0.7);
+      color: var(--accent);
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .eyebrow-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(63, 208, 255, 0.8);
+    }
+
+    .hero h1 {
+      font-size: clamp(2.3rem, 4vw, 3.1rem);
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(120deg, #3fd0ff, #f5c86a);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero-subtitle {
+      color: var(--muted);
+      font-size: 0.98rem;
+      max-width: 34rem;
+      margin-bottom: 24px;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 26px;
+    }
+
+    .hero-badge {
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      background: rgba(11, 13, 21, 0.9);
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .btn-primary {
+      padding: 11px 20px;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: linear-gradient(135deg, #3fd0ff, #2a9dff);
+      color: #05060a;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      box-shadow: 0 14px 35px rgba(63, 208, 255, 0.45);
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.06);
+    }
+
+    .btn-ghost {
+      padding: 10px 16px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(7, 8, 16, 0.7);
+      color: var(--muted);
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .btn-ghost span {
+      opacity: 0.8;
+    }
+
+    .hero-footnote {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .hero-visual {
+      border-radius: var(--radius-xl);
+      background: radial-gradient(circle at top left, rgba(63, 208, 255, 0.17), rgba(5, 6, 10, 0.9)),
+                  radial-gradient(circle at bottom right, rgba(245, 200, 106, 0.16), rgba(5, 6, 10, 1));
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 20px;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+      min-height: 270px;
+    }
+
+    .hero-visual-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .hero-visual-pill {
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(5, 7, 16, 0.7);
+      border: 1px solid rgba(63, 208, 255, 0.4);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .hero-visual-diagram {
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(4, 5, 14, 0.9);
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .diagram-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      font-size: 0.7rem;
+    }
+
+    .diagram-node {
+      border-radius: 999px;
+      padding: 6px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: radial-gradient(circle at top left, rgba(63, 208, 255, 0.2), rgba(5, 6, 12, 0.96));
+      text-align: center;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .diagram-node.highlight {
+      border-color: rgba(245, 200, 106, 0.8);
+      color: #fef5dd;
+    }
+
+    .diagram-footer {
+      margin-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .diagram-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .diagram-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(63, 208, 255, 0.4);
+    }
+
+    .diagram-dot.primary {
+      background: #3fd0ff;
+      box-shadow: 0 0 10px rgba(63, 208, 255, 0.9);
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+    }
+
+    .section-subtitle {
+      color: var(--muted);
+      font-size: 0.95rem;
+      max-width: 34rem;
+      margin-bottom: 24px;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 32px;
+      align-items: flex-start;
+    }
+
+    .pills-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .pill {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: var(--muted);
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 20px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.55);
+      font-size: 0.9rem;
+    }
+
+    .card h3 {
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-bottom: 10px;
+    }
+
+    .card-tag {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .card-list {
+      list-style: none;
+      padding-left: 0;
+      margin: 8px 0 0;
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+
+    .card-list li::before {
+      content: "• ";
+      color: var(--accent);
+      margin-right: 2px;
+    }
+
+    .arch-card {
+      background: radial-gradient(circle at top left, rgba(63, 208, 255, 0.18), rgba(11, 13, 21, 0.98));
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(63, 208, 255, 0.35);
+      padding: 18px 18px 16px;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .arch-placeholder {
+      border-radius: 18px;
+      border: 1px dashed rgba(204, 214, 255, 0.35);
+      background: radial-gradient(circle at top, rgba(63, 208, 255, 0.16), rgba(5, 6, 12, 0.9));
+      padding: 16px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .arch-badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .arch-pill {
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      font-size: 0.72rem;
+      color: var(--muted);
+      background: rgba(5, 6, 12, 0.9);
+    }
+
+    .arch-flow {
+      margin-top: 8px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .pricing-card {
+      background: var(--card);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      padding: 18px 18px 16px;
+      box-shadow: var(--shadow-soft);
+      font-size: 0.9rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pricing-card.featured {
+      border-color: rgba(63, 208, 255, 0.7);
+      box-shadow: 0 22px 60px rgba(63, 208, 255, 0.35);
+      background: radial-gradient(circle at top left, rgba(63, 208, 255, 0.22), rgba(11, 13, 21, 0.98));
+    }
+
+    .pricing-pill {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .pricing-title {
+      font-size: 1.05rem;
+      margin-bottom: 6px;
+    }
+
+    .pricing-price {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .pricing-price span {
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: var(--muted);
+      margin-left: 4px;
+    }
+
+    .pricing-desc {
+      font-size: 0.84rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .pricing-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .pricing-list li {
+      margin-bottom: 4px;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .pricing-dot {
+      margin-top: 5px;
+      width: 4px;
+      height: 4px;
+      border-radius: 999px;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 0.78rem;
+      margin-top: 8px;
+    }
+
+    .segment-card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      padding: 14px 14px 12px;
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+
+    .segment-title {
+      font-size: 0.9rem;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .cta-section {
+      padding: 52px 0;
+    }
+
+    .cta-inner {
+      background: radial-gradient(circle at top left, rgba(63, 208, 255, 0.18), rgba(11, 13, 21, 0.98));
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(63, 208, 255, 0.45);
+      padding: 26px 22px 20px;
+      box-shadow: var(--shadow-soft);
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 24px;
+      align-items: flex-start;
+    }
+
+    .cta-inner h2 {
+      font-size: 1.5rem;
+      margin-bottom: 6px;
+    }
+
+    .cta-inner p {
+      color: var(--muted);
+      font-size: 0.92rem;
+      max-width: 26rem;
+      margin-bottom: 14px;
+    }
+
+    .cta-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .cta-note {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .contact-card {
+      background: rgba(5, 7, 16, 0.94);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 14px 16px;
+      font-size: 0.84rem;
+    }
+
+    .contact-line {
+      margin-bottom: 6px;
+    }
+
+    .contact-line span {
+      color: var(--muted);
+    }
+
+    .contact-email {
+      color: var(--accent);
+      font-weight: 500;
+      word-break: break-all;
+    }
+
+    .form {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .input,
+    .textarea {
+      background: rgba(5, 7, 16, 0.95);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 8px 10px;
+      color: var(--text);
+      font-size: 0.85rem;
+      width: 100%;
+    }
+
+    .input::placeholder,
+    .textarea::placeholder {
+      color: rgba(154, 160, 184, 0.9);
+    }
+
+    .textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .form-helper {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 16px 0 22px;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+    }
+
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+
+    .footer-disclaimer {
+      max-width: 460px;
+    }
+
+    @media (max-width: 960px) {
+      .hero-grid,
+      .split,
+      .cta-inner {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .hero {
+        padding-top: 16px;
+      }
+      .hero-grid {
+        gap: 30px;
+      }
+      .hero-visual {
+        order: -1;
+      }
+      .pricing-grid,
+      .card-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 720px) {
+      .nav-links {
+        display: none;
+      }
+      .shell {
+        padding: 0 16px;
+      }
+      section {
+        padding: 42px 0;
+      }
+      .cta-inner {
+        padding: 20px 16px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER / NAV -->
+  <header>
+    <div class="shell">
+      <nav class="nav">
+        <div class="brand">
+          <div class="brand-logo">TJ</div>
+          <div>TJH DIGITAL</div>
+        </div>
+        <div class="nav-links">
+          <a href="#what-we-build">Platform</a>
+          <a href="#architecture">Architecture</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#contact" class="nav-cta">Contact Us</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="shell">
+        <div class="hero-grid">
+          <div>
+            <div class="eyebrow">
+              <div class="eyebrow-dot"></div>
+              AI Trading Infrastructure & Automation
+            </div>
+            <h1>
+              Building <span class="gradient-text">Intelligent Trading Platforms</span><br/>
+              with AI & Automation.
+            </h1>
+            <p class="hero-subtitle">
+              TJH Digital architects fully custom, institutional-grade algorithmic trading systems
+              using Interactive Brokers (IBKR), Azure, Kafka, Redis, and modern microservices — deployed
+              exclusively for your strategy and infrastructure.
+            </p>
+
+            <div class="hero-badges">
+              <div class="hero-badge">Custom IBKR Integration</div>
+              <div class="hero-badge">AI Signal Engines</div>
+              <div class="hero-badge">Real-Time Kafka Streaming</div>
+              <div class="hero-badge">Discord & Mobile Alerts</div>
+            </div>
+
+            <div class="hero-ctas">
+              <a href="#contact">
+                <button class="btn-primary">Build Your Trading Platform</button>
+              </a>
+              <a href="https://x.com" target="_blank" rel="noopener noreferrer">
+                <button class="btn-ghost">
+                  <span>Follow Signals on X (Twitter)</span>
+                </button>
+              </a>
+            </div>
+
+            <div class="hero-footnote">
+              No generic bots. No shared systems. 100% custom infrastructure for your trading.
+            </div>
+          </div>
+
+          <div class="hero-visual" aria-hidden="true">
+            <div class="hero-visual-header">
+              <div class="hero-visual-pill">Real-Time Trading Flow</div>
+              <div style="font-size:0.75rem;color:var(--muted);">
+                &bull; Latency-Optimized &bull; Cloud-Native
+              </div>
+            </div>
+            <div class="hero-visual-diagram">
+              <div class="diagram-grid">
+                <div class="diagram-node">Market Data</div>
+                <div class="diagram-node highlight">Kafka Streaming Layer</div>
+                <div class="diagram-node">AI Signal Engine</div>
+                <div class="diagram-node">Risk Engine</div>
+                <div class="diagram-node">Strategy Execution</div>
+                <div class="diagram-node highlight">IBKR Gateway</div>
+                <div class="diagram-node">Redis Cache</div>
+                <div class="diagram-node">MongoDB Store</div>
+                <div class="diagram-node">Discord / Mobile / X</div>
+              </div>
+              <div class="diagram-footer">
+                <span>Live analysis & alerts in milliseconds.</span>
+                <div class="diagram-dots">
+                  <div class="diagram-dot"></div>
+                  <div class="diagram-dot primary"></div>
+                  <div class="diagram-dot"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- WHAT WE BUILD -->
+    <section id="what-we-build">
+      <div class="shell">
+        <div class="section-label">What We Build</div>
+        <h2 class="section-title">Institutional-Grade Trading Infrastructure — Custom for You</h2>
+        <p class="section-subtitle">
+          We design and deploy end-to-end, production-ready trading ecosystems that mirror the
+          infrastructure of professional trading firms, tailored to your strategy and risk profile.
+        </p>
+
+        <div class="split">
+          <div>
+            <p style="font-size:0.95rem;margin-bottom:10px;">
+              TJH Digital builds fully isolated trading platforms around your Interactive Brokers account
+              using:
+            </p>
+            <ul class="card-list" style="margin-top:6px;">
+              <li><strong>Interactive Brokers (IBKR)</strong> for paper and live execution</li>
+              <li><strong>Azure cloud</strong> for secure, scalable compute</li>
+              <li><strong>Apache Kafka</strong> for real-time streaming and event pipelines</li>
+              <li><strong>Redis</strong> for ultra-low-latency access to critical state</li>
+              <li><strong>MongoDB</strong> for historical data & analytics</li>
+              <li><strong>Microservices</strong> for modular, maintainable trade logic</li>
+              <li><strong>Discord / Mobile / X integrations</strong> for alerts and distribution</li>
+            </ul>
+            <div class="pills-row">
+              <div class="pill">Equities</div>
+              <div class="pill">Options</div>
+              <div class="pill">Short-Term Trading</div>
+              <div class="pill">Intraday Signals</div>
+              <div class="pill">Multi-Timeframe Logic</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-tag">Core Outcomes</div>
+            <h3>From Trading Ideas to Live Infrastructure</h3>
+            <p>
+              You bring the strategy. We turn it into a secure, automated system connected
+              to your IBKR account, with real-time streaming, robust risk controls, and transparent
+              alerting.
+            </p>
+            <ul class="card-list">
+              <li>Architected for automation from day one</li>
+              <li>Compatible with your existing brokers & tools</li>
+              <li>Deployed into your own cloud environment</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ARCHITECTURE -->
+    <section id="architecture">
+      <div class="shell">
+        <div class="section-label">Architecture</div>
+        <h2 class="section-title">Real-Time Trading Architecture</h2>
+        <p class="section-subtitle">
+          A streaming-first architecture connects live market data, AI-driven decision engines,
+          and execution — with alerts firing instantly to your channels.
+        </p>
+
+        <div class="split">
+          <div class="arch-card">
+            <div class="arch-badge-row">
+              <div class="arch-pill">Kafka &amp; Streaming</div>
+              <div class="arch-pill">AI Decision Layer</div>
+              <div class="arch-pill">IBKR Execution</div>
+            </div>
+            <div class="arch-placeholder">
+              <strong>Animated Architecture (GIF / MP4 Placeholder)</strong>
+              <p style="margin-top:6px;">
+                Replace this block with your architecture animation.
+                Show data flowing from <em>Market Data → Kafka → AI Engine → Risk Engine → IBKR
+                → Redis/Mongo → Discord / Mobile / X (Twitter)</em>.
+              </p>
+              <p style="margin-top:6px;font-size:0.78rem;">
+                Export a short, loopable animation (~3–6 seconds) and embed it here for a live,
+                premium fintech feel.
+              </p>
+            </div>
+            <div class="arch-flow">
+              Market data is ingested into <strong>Kafka</strong>, processed by your
+              <strong>AI Signal Engine</strong> and <strong>Risk Management Engine</strong>, then routed
+              into <strong>IBKR</strong> for paper or live execution. State is cached in
+              <strong>Redis</strong> and persisted to <strong>MongoDB</strong>, while alerts are dispatched
+              to <strong>Discord, mobile, and X (Twitter)</strong> in real time.
+            </div>
+          </div>
+
+          <div>
+            <div class="card">
+              <div class="card-tag">Key Components</div>
+              <h3>Designed for Latency, Reliability & Control</h3>
+              <ul class="card-list">
+                <li>Streaming-first architecture with Apache Kafka</li>
+                <li>Dedicated AI & rule-based engines for signal generation</li>
+                <li>Risk filters & throttle logic before any order hits the market</li>
+                <li>Redis cache for ultra-fast access to current positions & state</li>
+                <li>MongoDB for history, analytics & reporting</li>
+                <li>Decoupled alert services for Discord, mobile & X</li>
+              </ul>
+            </div>
+
+            <div class="segment-card" style="margin-top:14px;">
+              <div class="segment-title">Your Strategy. Your Cloud. Your Control.</div>
+              <p>
+                Each deployment is isolated to your accounts and your infrastructure.
+                TJH Digital does not pool client systems or share bots — every platform
+                is unique, custom, and private.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- WHAT WE OFFER -->
+    <section>
+      <div class="shell">
+        <div class="section-label">Services</div>
+        <h2 class="section-title">What We Offer</h2>
+        <p class="section-subtitle">
+          From base infrastructure to advanced AI strategy work, TJH Digital provides the core building
+          blocks for serious, data-driven traders and trading businesses.
+        </p>
+
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-tag">01</div>
+            <h3>Private IBKR Trading Systems</h3>
+            <p>
+              Fully isolated systems connected directly to your IBKR account — configured for
+              paper or live trading with secure credential handling.
+            </p>
+            <ul class="card-list">
+              <li>Single-tenant architecture</li>
+              <li>Paper-to-live transition workflows</li>
+              <li>Fail-safe kill-switch patterns</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-tag">02</div>
+            <h3>AI-Driven Trade Alerts</h3>
+            <p>
+              Real-time signals and alerts delivered exactly where you operate — Discord, mobile,
+              or X — with your own branding and logic.
+            </p>
+            <ul class="card-list">
+              <li>Multi-timeframe signals</li>
+              <li>Momentum & breakout logic</li>
+              <li>Custom formatting for your community</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-tag">03</div>
+            <h3>Custom Strategy Engineering</h3>
+            <p>
+              We translate your trading playbook into production-ready engines, including rules,
+              indicators, and ML-based components where appropriate.
+            </p>
+            <ul class="card-list">
+              <li>Technical indicator stacks</li>
+              <li>Rule-based & AI hybrid models</li>
+              <li>Risk & position sizing logic</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section id="pricing">
+      <div class="shell">
+        <div class="section-label">Pricing</div>
+        <h2 class="section-title">Simple, Transparent Pricing</h2>
+        <p class="section-subtitle">
+          Built for serious traders, small funds, and fintech startups who need real infrastructure — not
+          hobby-grade bots.
+        </p>
+
+        <div class="pricing-grid">
+          <!-- Setup -->
+          <div class="pricing-card featured">
+            <div class="pricing-pill">Platform Setup</div>
+            <div class="pricing-title">Custom Trading Platform Setup</div>
+            <div class="pricing-price">$6,500<span> one-time</span></div>
+            <p class="pricing-desc">
+              Full initial deployment of your custom trading platform, ready for paper or live trading.
+            </p>
+            <ul class="pricing-list">
+              <li><div class="pricing-dot"></div><span>Azure VM provisioning & hardening</span></li>
+              <li><div class="pricing-dot"></div><span>Kafka, Redis, MongoDB deployment</span></li>
+              <li><div class="pricing-dot"></div><span>Core microservices installation</span></li>
+              <li><div class="pricing-dot"></div><span>IBKR paper or live integration</span></li>
+              <li><div class="pricing-dot"></div><span>Discord alert service configuration</span></li>
+              <li><div class="pricing-dot"></div><span>Logging, monitoring & basic dashboards</span></li>
+            </ul>
+          </div>
+
+          <!-- Monthly -->
+          <div class="pricing-card">
+            <div class="pricing-pill">Infrastructure & Support</div>
+            <div class="pricing-title">Platform Maintenance</div>
+            <div class="pricing-price">$650<span> / month</span></div>
+            <p class="pricing-desc">
+              Ongoing reliability, upkeep, and light support for your trading platform.
+            </p>
+            <ul class="pricing-list">
+              <li><div class="pricing-dot"></div><span>VM uptime & health monitoring</span></li>
+              <li><div class="pricing-dot"></div><span>Kafka & Redis health checks</span></li>
+              <li><div class="pricing-dot"></div><span>Log rotation & housekeeping</span></li>
+              <li><div class="pricing-dot"></div><span>Minor bug fixes & small updates</span></li>
+              <li><div class="pricing-dot"></div><span>IBKR connectivity monitoring</span></li>
+            </ul>
+          </div>
+
+          <!-- Hourly -->
+          <div class="pricing-card">
+            <div class="pricing-pill">Strategy & Features</div>
+            <div class="pricing-title">Custom Strategy Development</div>
+            <div class="pricing-price">$150<span> / hour</span></div>
+            <p class="pricing-desc">
+              Deep engineering work to implement, refine, or extend your trading logic and alerting.
+            </p>
+            <ul class="pricing-list">
+              <li><div class="pricing-dot"></div><span>Custom entry/exit rules</span></li>
+              <li><div class="pricing-dot"></div><span>Multi-timeframe signal engines</span></li>
+              <li><div class="pricing-dot"></div><span>Options & derivatives logic</span></li>
+              <li><div class="pricing-dot"></div><span>AI/ML strategy components</span></li>
+              <li><div class="pricing-dot"></div><span>Custom dashboards & alert channels</span></li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- WHO & WHY -->
+    <section>
+      <div class="shell">
+        <div class="section-label">Clients</div>
+        <h2 class="section-title">Who We Build For & Why They Choose Us</h2>
+        <p class="section-subtitle">
+          TJH Digital works with traders and teams who treat their trading like a business — not a hobby.
+        </p>
+
+        <div class="split">
+          <div>
+            <div class="segment-card">
+              <div class="segment-title">Who We Build For</div>
+              <p style="margin-bottom:8px;">
+                Our platforms are designed for:
+              </p>
+              <ul class="card-list">
+                <li>Active retail and intraday traders</li>
+                <li>Options traders and volatility strategies</li>
+                <li>Prop trading groups and small funds</li>
+                <li>Fintech startups validating new products</li>
+                <li>Trading educators launching signal communities</li>
+              </ul>
+              <div class="pill-row">
+                <div class="pill">High-Intent Traders</div>
+                <div class="pill">Small Funds</div>
+                <div class="pill">Fintech Builders</div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="segment-card">
+              <div class="segment-title">Why TJH Digital</div>
+              <p>
+                We combine real-world trading experience with deep cloud, AI, and streaming architecture
+                expertise. That means:
+              </p>
+              <ul class="card-list">
+                <li>Infrastructure-first thinking, not just scripts and bots</li>
+                <li>Secure, private, single-tenant deployments</li>
+                <li>Transparent logic — no black-box platforms</li>
+                <li>Systems tuned for low latency and reliability</li>
+              </ul>
+              <p style="margin-top:6px;">
+                The result is infrastructure that can grow with your capital, strategies, and audience.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA + CONTACT / NETLIFY FORM -->
+    <section id="contact" class="cta-section">
+      <div class="shell">
+        <div class="cta-inner">
+          <div>
+            <div class="section-label">Get Started</div>
+            <h2>Build Your Own AI-Powered Trading Platform</h2>
+            <p>
+              Ready to move your trading from ad-hoc tools into a fully engineered platform?
+              Share a bit about your strategy and infrastructure, and we’ll follow up with next steps.
+            </p>
+            <div class="cta-actions">
+              <a href="#contact-form"><button class="btn-primary">Request a Consultation</button></a>
+              <a href="mailto:contact@tjh-digital.com"><button class="btn-ghost"><span>Email TJH Digital</span></button></a>
+            </div>
+            <div class="cta-note">
+              Custom platform builds start at <strong>$6,500</strong> with ongoing maintenance at
+              <strong>$650 / month</strong>. Strategy work is billed at <strong>$150 / hour</strong>.
+            </div>
+          </div>
+
+          <div class="contact-card" id="contact-form">
+            <div class="contact-line">
+              <span>Direct email:&nbsp;</span>
+              <a class="contact-email" href="mailto:contact@tjh-digital.com">contact@tjh-digital.com</a>
+            </div>
+            <div class="contact-line">
+              Or use the form below — we’ll respond as soon as possible.
+            </div>
+
+            <!-- Netlify Form -->
+            <form name="contact" method="POST" data-netlify="true" class="form">
+              <input type="hidden" name="form-name" value="contact" />
+              <div class="form-row">
+                <input class="input" type="text" name="name" placeholder="Your name" required />
+                <input class="input" type="email" name="email" placeholder="Email address" required />
+              </div>
+              <div class="form-row">
+                <input class="input" type="text" name="company" placeholder="Company / Fund / Trading name (optional)" />
+              </div>
+              <div class="form-row">
+                <textarea class="textarea" name="details" placeholder="Briefly describe your trading style and what you’d like the platform to do." required></textarea>
+              </div>
+              <button type="submit" class="btn-primary" style="align-self:flex-start;">Send Message</button>
+              <div class="form-helper">
+                By reaching out, you acknowledge that TJH Digital provides infrastructure and software services only and does not offer financial advice.
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="shell">
+      <div class="footer-row">
+        <div>
+          <div style="font-weight:500;margin-bottom:4px;">TJH Digital LLC</div>
+          <div>AI Trading Infrastructure &amp; Automation</div>
+        </div>
+        <div class="footer-disclaimer">
+          <div style="margin-bottom:4px;">
+            <strong>Disclaimer:</strong> Trading involves risk, including the possible loss of capital.
+          </div>
+          <div>
+            TJH Digital provides infrastructure and software engineering services only. Nothing on this site
+            constitutes financial, investment, or trading advice. You are responsible for all decisions and
+            risks associated with the use of any system we build.
+          </div>
+        </div>
+        <div class="footer-links">
+          <a href="mailto:contact@tjh-digital.com">Email</a>
+          <a href="https://x.com" target="_blank" rel="noopener noreferrer">X (Twitter)</a>
+          <a href="#architecture">Architecture</a>
+          <a href="#pricing">Pricing</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
+
