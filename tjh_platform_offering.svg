@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="1100" height="300" viewBox="0 0 1100 300"
+     style="background:#05060a">
+
+  <!-- 🌟 GLOW EFFECTS -->
+  <defs>
+    <filter id="glow-blue" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="glow-gold" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- 🎨 STYLES -->
+  <style>
+    .box { fill:#111320; stroke:#3fd0ff; stroke-width:2; rx:12; }
+    .label { fill:#f5f7ff; font-family:Arial; font-size:15px; text-anchor:middle; }
+    .arrow { stroke:#9aa0b8; stroke-width:2; fill:none; }
+
+    .neon-blue { fill:#3fd0ff; filter:url(#glow-blue); }
+    .neon-gold { fill:#f5c86a; filter:url(#glow-gold); }
+  </style>
+
+  <!-- 📦 NODES -->
+
+  <!-- Interactive Brokers -->
+  <rect x="60" y="100" width="220" height="80" class="box"/>
+  <text x="170" y="145" class="label">Interactive Brokers</text>
+
+  <!-- TJH Platform -->
+  <rect x="420" y="100" width="260" height="80" class="box"/>
+  <text x="550" y="145" class="label">TJH Trading Platform</text>
+
+  <!-- Outputs -->
+  <rect x="820" y="50" width="220" height="50" class="box"/>
+  <text x="930" y="82" class="label">Twitter</text>
+
+  <rect x="820" y="125" width="220" height="50" class="box"/>
+  <text x="930" y="158" class="label">Discord</text>
+
+  <rect x="820" y="200" width="220" height="50" class="box"/>
+  <text x="930" y="233" class="label">Mobile</text>
+
+  <!-- ➝ FLOW PATHS -->
+
+  <path id="flow-ibkr-tjh" class="arrow" d="M280 140 L420 140"/>
+  <path id="flow-tjh-twitter" class="arrow" d="M680 140 L820 75"/>
+  <path id="flow-tjh-discord" class="arrow" d="M680 140 L820 150"/>
+  <path id="flow-tjh-mobile" class="arrow" d="M680 140 L820 225"/>
+
+  <!-- 🔥 ANIMATED DATA PULSES -->
+
+  <circle r="5" class="neon-blue">
+    <animateMotion dur="2s" repeatCount="indefinite">
+      <mpath href="#flow-ibkr-tjh"/>
+    </animateMotion>
+  </circle>
+
+  <circle r="5" class="neon-gold">
+    <animateMotion dur="2s" begin="0.8s" repeatCount="indefinite">
+      <mpath href="#flow-ibkr-tjh"/>
+    </animateMotion>
+  </circle>
+
+  <circle r="5" class="neon-blue">
+    <animateMotion dur="2s" repeatCount="indefinite">
+      <mpath href="#flow-tjh-twitter"/>
+    </animateMotion>
+  </circle>
+
+  <circle r="5" class="neon-gold">
+    <animateMotion dur="2s" repeatCount="indefinite">
+      <mpath href="#flow-tjh-discord"/>
+    </animateMotion>
+  </circle>
+
+  <circle r="5" class="neon-blue">
+    <animateMotion dur="2s" repeatCount="indefinite">
+      <mpath href="#flow-tjh-mobile"/>
+    </animateMotion>
+  </circle>
+
+  <!-- 📝 FOOTNOTE (FIXED &amp; ESCAPE) -->
+  <text x="550" y="280" class="label" fill="#9aa0b8">
+    Live market data → AI processing → real-time alerts to social &amp; mobile
+  </text>
+
+</svg>
